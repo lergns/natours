@@ -4,5 +4,248 @@ COLORS:
 Light green: #7ed56f
 Medium green: #55c57a
 Dark green: #28b485
-
 */
+
+/*
+ * --> applies to ALL elements on the page;
+ box-sizing: inherit; --> forces all the elements to inherit box-sizing: border-box; from the body {}
+ ::after and ::before pseudo-elements should be mentioned separately as well
+ */
+*,
+*::after,
+*::before {
+  margin: 0;
+  padding: 0;
+  box-sizing: inherit;
+}
+
+/*
+Setting root element font size to 62.5% (of default 16px) --> 1rem === 10px; all the other properties are set in rems in relation to this; setting it in % of 16px allows user to change all the other rem measurements on the page !
+*/
+html {
+  font-size: 62.5%;
+}
+
+/*
+padding: 30px; --> NOT inherited by <body>'s children;
+box-sizing: border-box; --> changes the box model so that the borders and paddings are no longer added to the total width or the total height, specified for a box;
+*/
+body {
+  font-family: "Lato", sans-serif;
+  font-weight: 400;
+  /*  font-size: 16px;*/
+  line-height: 1.7;
+  color: #777;
+  padding: 3rem;
+  box-sizing: border-box;
+}
+
+/*
+height: 95vh; --> header will have height of 95% of the viewport height;
+background-size: cover; --> whatever the width of a viewport or the element, it will always be placed inside of the box;
+background-position: top; --> whatever the viewport size, top of the image will always stay at the top of the container;
+background-image: linear-gradient(to right bottom, #7ed56f, #28b485), url("../img/hero.jpg"); --> image will be placed BELOW gradient, gradient goes from left top to right bottom;
+clip-path: polygon(0 0, 100% 0, 100% 75vh, 0 100%); --> from top left corner to bottom left corner (clockwise) - pairs of x and y axios values;
+*/
+.header {
+  height: 95vh;
+  background-image: linear-gradient(
+      to right bottom,
+      rgba(126, 213, 111, 0.8),
+      rgba(40, 180, 131, 0.8)
+    ),
+    url("../img/hero.jpg");
+  background-size: cover;
+  background-position: top;
+  clip-path: polygon(0 0, 100% 0, 100% 75vh, 0 100%);
+  position: relative;
+}
+
+/*
+position: absolute; --> relatively towards parent element with position: relative !
+*/
+.header__logo-box {
+  position: absolute;
+  top: 4rem;
+  left: 4rem;
+}
+
+.header__logo {
+  height: 3.5rem;
+}
+
+/*
+top: 40%; left: 50%; --> relative to PARENT element !
+transform: translate(-50%, -50%); --> -50% from the .text-box ITSELF, not the parent element !
+*/
+.header__text-box {
+  position: absolute;
+  top: 40%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+}
+
+/*
+backface-visibility: hidden; --> making sure animation in child elements doesn't shake
+*/
+.heading-primary {
+  color: #fff;
+  text-transform: uppercase;
+
+  backface-visibility: hidden;
+  margin-bottom: 6rem;
+}
+
+/*
+animation-name: moveInLeft; animation-duration: 3s; --> the only 2 animation properties which are REQUIRED
+*/
+.heading-primary--main {
+  display: block;
+  font-size: 6rem;
+  font-weight: 400;
+  letter-spacing: 3.5rem;
+
+  animation-name: moveInLeft;
+  animation-duration: 1s;
+  animation-timing-function: ease-out;
+
+  /*
+    animation-delay: 3s;
+    animation-iteration-count: 3;
+    */
+}
+
+/*
+display: block; --> so that text blocks are below one another
+animation: moveInRight 1s ease-out; --> shorthand way of specifying animation properties
+*/
+.heading-primary--sub {
+  display: block;
+  font-size: 2rem;
+  font-weight: 700;
+  letter-spacing: 1.5rem;
+
+  animation: moveInRight 1s ease-out;
+}
+
+/*
+0% { WHAT TO EXECUTE AT 0% OF ANIMATION }
+*/
+@keyframes moveInLeft {
+  0% {
+    opacity: 0;
+    transform: translateX(-10rem);
+  }
+
+  80% {
+    transform: translateX(1rem);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes moveInRight {
+  0% {
+    opacity: 0;
+    transform: translateX(10rem);
+  }
+
+  80% {
+    transform: translateX(-1rem);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes moveInBottom {
+  0% {
+    opacity: 0;
+    transform: translateY(3rem);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/*
+All inline (as well as inline-block) elements are treated as text !
+transition: all 0.2s; --> animate all transform properties (from :hover and :active) with 0.2s speed. transition: has to always be set for the initial (:link) state 
+*/
+.btn:link,
+.btn:visited {
+  text-transform: uppercase;
+  text-decoration: none;
+  padding: 1.5rem 4rem;
+  display: inline-block;
+  border-radius: 10rem;
+  transition: all 0.2s;
+  position: relative;
+  font-size: 1.6rem;
+}
+
+/*
+In CSS, Y axis moves from top to bottom !
+box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2); --> box-shadow: X-AXIOS Y-AXIOS SHADOW-BLUR COLOR
+*/
+.btn:hover {
+  transform: translateY(-0.3rem);
+  box-shadow: 0 1rem 2rem rgba(0, 0, 0, 0.2);
+}
+
+.btn:active {
+  transform: translateY(-1px);
+  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.2);
+}
+
+.btn--white {
+  background-color: #fff;
+  color: #777;
+}
+
+/*
+In order for ::after pseudo-element to appear on the page, it should have content: and display: properties set !
+::after pseudo-element is treated as a child of .btn
+z-index: -1; --> .btn::after will be below .btn:link on the Z axis
+*/
+.btn::after {
+  content: "";
+  display: inline-block;
+  height: 100%;
+  width: 100%;
+  border-radius: 10rem;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: -1;
+  transition: all 0.5s;
+}
+
+.btn--white::after {
+  background-color: #ffffff;
+}
+
+/*
+transform: scaleX(1.4) scaleY(1.6) - in the child element, transition: all 0.5s - in the parent one !
+*/
+.btn:hover::after {
+  transform: scaleX(1.4) scaleY(1.6);
+  opacity: 0;
+}
+
+/*
+animation: ... 0.75s; --> animation-delay
+animation-fill-mode: backwards; --> automatically applies styling rules of ANIMATION's 0% before the ANIMATION starts
+*/
+.btn--animated {
+  animation: moveInBottom 0.5s ease-out 0.75s;
+  animation-fill-mode: backwards;
+}
